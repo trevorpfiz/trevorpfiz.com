@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+/* eslint-disable @typescript-eslint/require-await */
+import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { allPosts } from 'contentlayer/generated'
 
