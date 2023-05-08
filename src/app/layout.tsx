@@ -1,10 +1,12 @@
 import { Inter } from 'next/font/google'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { Analytics } from '~/components/analytics'
 import { ModeToggle } from '~/components/mode-toggle'
 import { ThemeProvider } from '~/components/theme-provider'
 import '~/styles/globals.css'
+import { Navigation } from '../ui/Navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,17 +26,23 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={`antialiased min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 ${inter.className}`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="max-w-2xl mx-auto py-10 px-4">
+          <div className="max-w-2xl lg:max-w-5xl mx-auto py-10 px-4">
             <header>
-              <div className="flex items-center justify-between">
+              <nav className="flex flex-wrap items-center justify-between">
+                <Link href="/">
+                  <Image
+                    src="/spark-logo.png"
+                    width={40}
+                    height={40}
+                    alt="Profile Picture"
+                    className="rounded-full"
+                  />
+                </Link>
+                <Navigation />
                 <ModeToggle />
-                <nav className="ml-auto text-sm font-medium space-x-6">
-                  <Link href="/">Home</Link>
-                  <Link href="/about">About</Link>
-                </nav>
-              </div>
+              </nav>
             </header>
-            <main>{children}</main>
+            <main className="mt-16 sm:mt-32">{children}</main>
           </div>
           <Analytics />
         </ThemeProvider>
