@@ -1,6 +1,6 @@
-import { JSX, SVGProps } from 'react'
 import Image from 'next/image'
 
+import type { JSX, SVGProps } from 'react'
 import { Card } from '~/components/Card'
 
 const projects = [

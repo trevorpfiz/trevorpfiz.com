@@ -5,6 +5,7 @@ import { allPosts } from 'contentlayer/generated'
 
 import { Mdx } from '~/components/mdx-components'
 import '~/styles/mdx.css'
+import { formatDate } from '~/lib/utils'
 
 interface PostProps {
   params: {
@@ -50,11 +51,14 @@ export default async function PostPage({ params }: PostProps) {
   }
 
   return (
-    <article className="py-6 prose dark:prose-invert mx-auto">
-      <h1 className="mb-2 font-sans">{post.title}</h1>
-      {post.description && (
-        <p className="text-xl mt-0 text-slate-700 dark:text-slate-200">{post.description}</p>
-      )}
+    <article className="pb-6 prose dark:prose-invert">
+      <time dateTime={post.date} className="order-first flex items-center text-base">
+        <span className="h-4 w-0.5 rounded-full bg-zinc-200"></span>
+        <span className="ml-3">{formatDate(post.date)}</span>
+      </time>
+      <h1 className="mb-6 font-sans mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+        {post.title}
+      </h1>
       <hr className="my-4" />
       <Mdx code={post.body.code} />
     </article>
