@@ -1,3 +1,4 @@
+import { JSX, SVGProps } from 'react'
 import Image from 'next/image'
 
 import { Card } from '~/components/Card'
@@ -29,7 +30,7 @@ const projects = [
   },
 ]
 
-function LinkIcon(props) {
+function LinkIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
       <path
