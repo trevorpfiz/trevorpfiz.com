@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { allPosts } from 'contentlayer/generated'
 
 import { Mdx } from '~/components/mdx-components'
+import '~/styles/mdx.css'
 
 interface PostProps {
   params: {
