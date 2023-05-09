@@ -1,8 +1,8 @@
 import { Inter } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Analytics } from '@vercel/analytics/react'
 
-import { Analytics } from '~/components/analytics'
 import { ModeToggle } from '~/components/mode-toggle'
 import { ThemeProvider } from '~/components/theme-provider'
 import '~/styles/globals.css'

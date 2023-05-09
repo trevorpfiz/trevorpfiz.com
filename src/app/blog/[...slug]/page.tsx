@@ -92,7 +92,7 @@ export default async function PostPage({ params }: PostProps) {
             priority
             width={1200}
             height={900}
-            // FIXME - not working?
+            // FIXME - not static?
             // placeholder="blur"
             className="w-full h-auto sm:rounded-3xl"
           />
