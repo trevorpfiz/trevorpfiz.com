@@ -2,6 +2,9 @@ import Image from 'next/image'
 
 import type { JSX, SVGProps } from 'react'
 import { Card } from '~/components/Card'
+import generationLogo from '~/images/generation-32x32.png'
+import mithridLogo from '~/images/mithrid-favicon.png'
+import thinkhiveLogo from '~/images/ThinkHive-comb-white.png'
 
 const projects = [
   {
@@ -9,7 +12,7 @@ const projects = [
     description:
       'Free research-focused courses to make allergy freedom a reality for the generations to come.',
     link: { href: 'https://www.generationallergyfree.com/', label: 'generationallergyfree.com' },
-    logo: '/generation-32x32.png',
+    logo: generationLogo,
     alt: 'Generation Allergy Free Logo',
   },
   {
@@ -17,7 +20,7 @@ const projects = [
     description:
       'A platform to create healthcare assistants that empower people with actionable health wisdom.',
     link: { href: 'https://www.thinkhive.ai/', label: 'thinkhive.ai' },
-    logo: '/ThinkHive-comb-white.png',
+    logo: thinkhiveLogo,
     alt: 'ThinkHive Logo',
   },
   {
@@ -25,7 +28,7 @@ const projects = [
     description:
       'A business with the goal of treating allergies through a data-driven approach to Oral Immunotherapy.',
     link: { href: 'https://mithridhealth.vercel.app/', label: 'mithridhealth.vercel.app' },
-    logo: '/mithrid-favicon.png',
+    logo: mithridLogo,
     alt: 'Mithrid Health Logo',
   },
 ]

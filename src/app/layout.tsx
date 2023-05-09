@@ -7,6 +7,7 @@ import { ModeToggle } from '~/components/mode-toggle'
 import { ThemeProvider } from '~/components/theme-provider'
 import '~/styles/globals.css'
 import { siteConfig } from '~/config/site'
+import sparkLogo from '~/images/spark-logo.png'
 import { Navigation } from '~/ui/Navigation'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -32,11 +33,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <nav className="flex flex-wrap items-center justify-between">
                 <Link href="/">
                   <Image
-                    src="/spark-logo.png"
+                    src={sparkLogo}
                     width={40}
                     height={40}
                     alt="Profile Picture"
                     className="rounded-full"
+                    priority
+                    placeholder="blur"
                   />
                 </Link>
                 <Navigation />

@@ -19,8 +19,8 @@ export default function BlogPage() {
   return (
     <>
       <div className="prose dark:prose-invert">
-        <h1 className="font-sans text-5xl font-bold">{`Writing on software, healthcare, and startups`}</h1>
-        <p>{`All of my long-form thoughts on health, AI, and more, collected in chronological order.`}</p>
+        <h1 className="font-sans text-5xl font-bold">{`Writing on health, artificial intelligence, and more`}</h1>
+        <p>{`All of my long-form thoughts, collected in chronological order.`}</p>
       </div>
       <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40 sm:mx-auto mt-16 sm:mt-20">
         <div className="flex max-w-3xl flex-col space-y-16">
