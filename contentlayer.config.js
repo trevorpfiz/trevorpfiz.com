@@ -77,6 +77,7 @@ export const Post = defineDocumentType(() => ({
         author: {
           '@type': 'Person',
           name: 'Trevor Pfizenmaier',
+          url: siteConfig.links.twitter,
         },
       }),
     },
