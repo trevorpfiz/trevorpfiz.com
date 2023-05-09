@@ -1,12 +1,18 @@
 import { allPosts } from 'contentlayer/generated'
 
+import { siteConfig } from '~/config/site'
 import { formatDate } from '~/lib/utils'
 import { Card } from '~/components/Card'
 
+export const metadata = {
+  title: `Blog | ${siteConfig.name}`,
+  description: `The personal blog of Trevor Pfizenmaier`,
+}
+
 export default function BlogPage() {
   const sortedPosts = allPosts.sort((a, b) => {
-    const dateA = new Date(a.date).getTime()
-    const dateB = new Date(b.date).getTime()
+    const dateA = new Date(a.datePublished).getTime()
+    const dateB = new Date(b.datePublished).getTime()
     return dateB - dateA
   })
 
@@ -22,14 +28,23 @@ export default function BlogPage() {
             <article key={post._id} className="md:grid md:grid-cols-4 md:items-baseline">
               <Card className="md:col-span-3">
                 <Card.Title href={post.slug}>{post.title}</Card.Title>
-                <Card.Eyebrow as="time" dateTime={post.date} className="md:hidden" decorate>
-                  {formatDate(post.date)}
+                <Card.Eyebrow
+                  as="time"
+                  dateTime={post.datePublished}
+                  className="md:hidden"
+                  decorate
+                >
+                  {formatDate(post.datePublished)}
                 </Card.Eyebrow>
-                <Card.Description>{post.description}</Card.Description>
+                <Card.Description>{post.summary}</Card.Description>
                 <Card.Cta>Read post</Card.Cta>
               </Card>
-              <Card.Eyebrow as="time" dateTime={post.date} className="mt-1 hidden md:block">
-                {formatDate(post.date)}
+              <Card.Eyebrow
+                as="time"
+                dateTime={post.datePublished}
+                className="mt-1 hidden md:block"
+              >
+                {formatDate(post.datePublished)}
               </Card.Eyebrow>
             </article>
           ))}

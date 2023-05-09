@@ -1,4 +1,10 @@
+import { siteConfig } from '~/config/site'
 import Projects from '~/ui/Projects'
+
+export const metadata = {
+  title: `Projects | ${siteConfig.name}`,
+  description: `The projects Trevor Pfizenmaier has worked on.`,
+}
 
 export default function ProjectsPage() {
   return (

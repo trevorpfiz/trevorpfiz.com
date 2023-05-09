@@ -5,6 +5,9 @@ import { allPosts } from 'contentlayer/generated'
 
 import { Mdx } from '~/components/mdx-components'
 import '~/styles/mdx.css'
+import Image from 'next/image'
+
+import { siteConfig } from '~/config/site'
 import { formatDate } from '~/lib/utils'
 
 interface PostProps {
@@ -31,9 +34,31 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
     return {}
   }
 
+  const ogUrl = post.image ? `${siteConfig.url}/${post.image}` : siteConfig.ogImage
+
   return {
     title: post.title,
-    description: post.description,
+    description: post.summary,
+    openGraph: {
+      title: post.title,
+      description: post.summary,
+      type: 'article',
+      url: `${siteConfig.url}/blog/${post.slugAsParams}`,
+      images: [
+        {
+          url: ogUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.summary,
+      images: [ogUrl],
+    },
   }
 }
 
@@ -51,14 +76,28 @@ export default async function PostPage({ params }: PostProps) {
   }
 
   return (
-    <article className="pb-6 prose dark:prose-invert">
-      <time dateTime={post.date} className="order-first flex items-center text-base">
+    <article className="pb-6 prose dark:prose-invert mx-auto">
+      <time dateTime={post.datePublished} className="order-first flex items-center text-base">
         <span className="h-4 w-0.5 rounded-full bg-zinc-200"></span>
-        <span className="ml-3">{formatDate(post.date)}</span>
+        <span className="ml-3">{formatDate(post.datePublished)}</span>
       </time>
       <h1 className="mb-6 font-sans mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
         {post.title}
       </h1>
+      {post.image && (
+        <div className="-mx-4 my-10 sm:mx-0">
+          <Image
+            src={`/${post.image}`}
+            alt={post.title}
+            priority
+            width={1200}
+            height={900}
+            // FIXME - not working?
+            // placeholder="blur"
+            className="w-full h-auto sm:rounded-3xl"
+          />
+        </div>
+      )}
       <hr className="my-4" />
       <Mdx code={post.body.code} />
     </article>

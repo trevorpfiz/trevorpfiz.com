@@ -6,13 +6,14 @@ import { Analytics } from '~/components/analytics'
 import { ModeToggle } from '~/components/mode-toggle'
 import { ThemeProvider } from '~/components/theme-provider'
 import '~/styles/globals.css'
-import { Navigation } from '../ui/Navigation'
+import { siteConfig } from '~/config/site'
+import { Navigation } from '~/ui/Navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Trevor Pfizenmaier',
-  description: `Trevor Pfizenmaier's personal website`,
+  title: siteConfig.name,
+  description: siteConfig.description,
 }
 
 interface RootLayoutProps {

@@ -3,6 +3,7 @@ import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { allPages } from 'contentlayer/generated'
 
+import { siteConfig } from '~/config/site'
 import { Mdx } from '~/components/mdx-components'
 
 interface PageProps {
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: page.title,
+    title: `${page.title} | ${siteConfig.name}`,
     description: page.description,
   }
 }
