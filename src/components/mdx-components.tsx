@@ -1,9 +1,39 @@
 import * as React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 
 import { cn } from '~/lib/utils'
 import { Callout } from '~/components/callout'
+
+const CustomLink = ({ className, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+  const href = props.href
+
+  if (href?.startsWith('/')) {
+    return (
+      <Link
+        href={href}
+        className={cn('font-medium underline underline-offset-4', className)}
+        {...props}
+      >
+        {props.children}
+      </Link>
+    )
+  }
+
+  if (href?.startsWith('#')) {
+    return <a className={className} {...props} />
+  }
+
+  return (
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn('font-medium underline underline-offset-4', className)}
+      {...props}
+    />
+  )
+}
 
 const components = {
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
@@ -45,14 +75,7 @@ const components = {
       {...props}
     />
   ),
-  a: ({ className, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a
-      className={cn('font-medium underline underline-offset-4', className)}
-      target="_blank"
-      rel="noopener noreferrer"
-      {...props}
-    />
-  ),
+  a: CustomLink,
   p: ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
     <p
       className={cn('leading-7 [&:not(:first-child)]:mt-6 [&:first-child]:m-0', className)}

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
     return {}
   }
 
-  const ogUrl = post.image ? `${siteConfig.url}/${post.image}` : siteConfig.ogImage
+  const ogUrl = post.image ? `${siteConfig.url}${post.image}` : siteConfig.ogImage
 
   return {
     title: post.title,
@@ -76,34 +76,41 @@ export default async function PostPage({ params }: PostProps) {
     notFound()
   }
 
-  const { base64, img } = await getPlaiceholder(`/${post.image}`)
+  const { base64, img } = await getPlaiceholder(post.image)
 
   return (
-    <article className="pb-6 prose dark:prose-invert mx-auto">
-      <time dateTime={post.datePublished} className="order-first flex items-center text-base">
-        <span className="h-4 w-0.5 rounded-full bg-zinc-200"></span>
-        <span className="ml-3">{formatDate(post.datePublished)}</span>
-      </time>
-      <h1 className="mb-6 font-sans mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
-        {post.title}
-      </h1>
-      {post.image && (
-        <div className="-mx-4 my-10 sm:mx-0">
-          <Image
-            src={img.src}
-            alt={post.title}
-            priority
-            width={img.width}
-            height={img.height}
-            // FIXME - not static?
-            placeholder="blur"
-            blurDataURL={base64}
-            className="w-full h-auto sm:rounded-3xl"
-          />
-        </div>
-      )}
-      <hr className="my-4" />
-      <Mdx code={post.body.code} />
-    </article>
+    <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(post.structuredData) }}
+      />
+
+      <article className="pb-6 prose dark:prose-invert mx-auto">
+        <time dateTime={post.datePublished} className="order-first flex items-center text-base">
+          <span className="h-4 w-0.5 rounded-full bg-zinc-200"></span>
+          <span className="ml-3">{formatDate(post.datePublished)}</span>
+        </time>
+        <h1 className="mb-6 font-sans mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+          {post.title}
+        </h1>
+        {post.image && (
+          <div className="-mx-4 my-10 sm:mx-0">
+            <Image
+              src={img.src}
+              alt={post.title}
+              priority
+              width={img.width}
+              height={img.height}
+              // FIXME - not static?
+              placeholder="blur"
+              blurDataURL={base64}
+              className="w-full h-auto sm:rounded-3xl"
+            />
+          </div>
+        )}
+        <hr className="my-4" />
+        <Mdx code={post.body.code} />
+      </article>
+    </section>
   )
 }

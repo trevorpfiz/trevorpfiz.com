@@ -4,6 +4,8 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 
+import { siteConfig } from './src/config/site'
+
 /** @type {import('contentlayer/source-files').ComputedFields} */
 const computedFields = {
   slug: {
@@ -59,7 +61,26 @@ export const Post = defineDocumentType(() => ({
       required: true,
     },
   },
-  computedFields,
+  computedFields: {
+    ...computedFields,
+    structuredData: {
+      type: 'object',
+      resolve: (doc) => ({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: doc.title,
+        datePublished: doc.datePublished,
+        dateModified: doc.dateModified,
+        description: doc.summary,
+        image: doc.image ? `${siteConfig.url}${doc.image}` : siteConfig.ogImage,
+        url: `${siteConfig.url}/blog/${doc._raw.flattenedPath.split('/').slice(1).join('/')}`,
+        author: {
+          '@type': 'Person',
+          name: 'Trevor Pfizenmaier',
+        },
+      }),
+    },
+  },
 }))
 
 export default makeSource({

@@ -30,3 +30,28 @@
 [data-rehype-pretty-code-title] + pre {
   @apply mt-0;
 }
+
+.prose .subheading-anchor {
+  visibility: hidden;
+  position: absolute;
+  text-decoration-line: none;
+  margin-left: -1em;
+  padding-right: 0.5em;
+  width: 80%;
+  max-width: 700px;
+  cursor: pointer;
+}
+
+.subheading-anchor:hover {
+  visibility: visible;
+}
+
+.prose .subheading-anchor:after {
+  --tw-text-opacity: 1;
+  color: rgb(212 212 212 / var(--tw-text-opacity));
+  content: '#';
+}
+
+.prose :hover > .subheading-anchor {
+  visibility: visible;
+}
