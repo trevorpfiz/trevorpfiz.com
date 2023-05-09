@@ -1,4 +1,5 @@
 const { withContentlayer } = require('next-contentlayer')
+const { withPlaiceholder } = require('@plaiceholder/next')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -15,4 +16,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withContentlayer(nextConfig)
+module.exports = withContentlayer(withPlaiceholder(nextConfig))

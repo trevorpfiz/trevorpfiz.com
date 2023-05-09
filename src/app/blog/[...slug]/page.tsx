@@ -2,6 +2,7 @@
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { allPosts } from 'contentlayer/generated'
+import { getPlaiceholder } from 'plaiceholder'
 
 import { Mdx } from '~/components/mdx-components'
 import '~/styles/mdx.css'
@@ -75,6 +76,8 @@ export default async function PostPage({ params }: PostProps) {
     notFound()
   }
 
+  const { base64, img } = await getPlaiceholder(`/${post.image}`)
+
   return (
     <article className="pb-6 prose dark:prose-invert mx-auto">
       <time dateTime={post.datePublished} className="order-first flex items-center text-base">
@@ -87,13 +90,14 @@ export default async function PostPage({ params }: PostProps) {
       {post.image && (
         <div className="-mx-4 my-10 sm:mx-0">
           <Image
-            src={`/${post.image}`}
+            src={img.src}
             alt={post.title}
             priority
-            width={1200}
-            height={900}
+            width={img.width}
+            height={img.height}
             // FIXME - not static?
-            // placeholder="blur"
+            placeholder="blur"
+            blurDataURL={base64}
             className="w-full h-auto sm:rounded-3xl"
           />
         </div>
