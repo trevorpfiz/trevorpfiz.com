@@ -6,9 +6,10 @@ import Datetime from "./Datetime.astro";
 
 export interface Props extends CollectionEntry<"blog"> {
   variant?: "h2" | "h3";
+  compact?: boolean;
 }
 
-const { variant = "h2", data, id, filePath } = Astro.props;
+const { variant = "h2", compact = false, data, id, filePath } = Astro.props;
 
 const { title, description, pubDatetime, modDatetime, timezone } = data;
 
@@ -31,6 +32,14 @@ const headerProps = {
       )
     }
   </a>
-  <Datetime {pubDatetime} {modDatetime} {timezone} />
-  <p>{description}</p>
+  <Datetime
+    {pubDatetime}
+    {modDatetime}
+    {timezone}
+    size={compact ? "sm" : "sm"}
+    showIcon={!compact}
+    showUpdatedLabel={!compact}
+    preferPublished={compact}
+  />
+  {compact ? null : <p>{description}</p>}
 </li>

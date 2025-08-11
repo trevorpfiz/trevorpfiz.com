@@ -6,13 +6,14 @@ import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
-import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
+import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
+import IconX from "@/assets/icons/IconX.svg";
 import { SITE } from "@/config";
 
 export interface Props {
@@ -85,11 +86,83 @@ const nextPost =
 <Layout {...layoutProps}>
   <Header />
   <BackButton />
+
+  <style>
+    :root {
+      --toc-width: 20%;
+    }
+
+    @media (min-width: 1230px) {
+      :root {
+        --toc-width: 25%;
+      }
+    }
+
+    @media (min-width: 1500px) {
+      :root {
+        --toc-width: 30%;
+      }
+    }
+
+    /* Hide desktop TOC and show mobile hamburger below lg (1024px) */
+    @media (max-width: 1023px) {
+      #post-toc-desktop {
+        display: none !important;
+      }
+
+      #toc-desktop-toggle {
+        display: none !important;
+      }
+
+      #main-content {
+        padding-left: 1rem !important;
+      }
+    }
+
+    /* Show desktop TOC and hide mobile hamburger at lg (1024px) and above */
+    @media (min-width: 1024px) {
+      #menu-btn {
+        display: none !important;
+      }
+    }
+  </style>
+  <!-- Desktop TOC toggle button and fixed nav - Only visible on desktop (lg+) -->
+  <button
+    id="toc-desktop-toggle"
+    class="fixed top-6 left-3 z-30 size-10 items-center justify-center lg:flex"
+    aria-controls="post-toc-desktop"
+    aria-expanded="true"
+    title="Toggle contents"
+  >
+    <IconMenuDeep id="toc-open-icon" class="hidden" />
+    <IconX id="toc-close-icon" />
+  </button>
+  <nav
+    id="post-toc-desktop"
+    class="fixed inset-y-0 left-0 z-20 hidden h-dvh overflow-y-auto bg-background px-6 pt-32 lg:block"
+    style="width: var(--toc-width, 20%);"
+    aria-label="Table of contents"
+  >
+    <h2 class="mb-4 text-base font-semibold">Contents</h2>
+    <ul id="toc-list-desktop" class="space-y-2"></ul>
+  </nav>
+
+  <!-- Mobile TOC overlay (below header, full height minus header) -->
+  <nav
+    id="post-toc-mobile"
+    class="fixed inset-x-0 bottom-0 z-40 hidden overflow-y-auto bg-background pt-4 sm:pt-8 lg:hidden"
+    aria-label="Table of contents"
+  >
+    <div class="mx-auto max-w-app px-4 py-4">
+      <h2 class="mb-4 text-lg font-semibold">Contents</h2>
+      <ul id="toc-list-mobile" class="list-none space-y-2 pl-0"></ul>
+    </div>
+  </nav>
   <main
     id="main-content"
     class:list={[
       "mx-auto w-full max-w-app px-4 pb-12",
-      { "mt-8": !SITE.showBackButton },
+      { "mt-8 sm:mt-12": !SITE.showBackButton },
     ]}
     data-pagefind-body
   >
@@ -100,15 +173,14 @@ const nextPost =
       {title}
     </h1>
     <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
-        class:list={[
-          "max-sm:hidden",
-          { hidden: !SITE.editPost.enabled || hideEditPost },
-        ]}>|</span
-      >
-      <EditPost {hideEditPost} {post} class="max-sm:hidden" />
+      <Datetime
+        {pubDatetime}
+        {modDatetime}
+        {timezone}
+        showIcon={false}
+        showUpdatedLabel={false}
+        preferPublished={true}
+      />
     </div>
     <article
       id="article"
@@ -126,8 +198,6 @@ const nextPost =
     </ul>
 
     <BackToTopButton />
-
-    <ShareLinks />
 
     <hr class="my-6 border-dashed" />
 
@@ -167,54 +237,18 @@ const nextPost =
 </Layout>
 
 <script is:inline data-astro-rerun>
-  /** Create a progress indicator
-   *  at the top */
-  function createProgressBar() {
-    // Create the main container div
-    const progressContainer = document.createElement("div");
-    progressContainer.className =
-      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
-
-    // Create the progress bar div
-    const progressBar = document.createElement("div");
-    progressBar.className = "progress-bar h-1 w-0 bg-accent";
-    progressBar.id = "myBar";
-
-    // Append the progress bar to the progress container
-    progressContainer.appendChild(progressBar);
-
-    // Append the progress container to the document body or any other desired parent element
-    document.body.appendChild(progressContainer);
-  }
-  createProgressBar();
-
-  /** Update the progress bar
-   *  when user scrolls */
-  function updateScrollProgress() {
-    document.addEventListener("scroll", () => {
-      const winScroll =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      const height =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      if (document) {
-        const myBar = document.getElementById("myBar");
-        if (myBar) {
-          myBar.style.width = scrolled + "%";
-        }
-      }
-    });
-  }
-  updateScrollProgress();
-
   /** Attaches links to headings in the document,
    *  allowing sharing of sections easily */
   function addHeadingLinks() {
     const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
+      document.querySelectorAll(
+        "article h2, article h3, article h4, article h5, article h6"
+      )
     );
     for (const heading of headings) {
+      // Only add links to headings that have an ID
+      if (!heading.id) continue;
+
       heading.classList.add("group");
       const link = document.createElement("a");
       link.className =
@@ -285,4 +319,193 @@ const nextPost =
   document.addEventListener("astro:after-swap", () =>
     window.scrollTo({ left: 0, top: 0, behavior: "instant" })
   );
+
+  // Build and wire up TOC for mobile and desktop
+  function setupPostToc() {
+    const mobileNav = document.querySelector("#post-toc-mobile");
+    const mobileList = document.querySelector("#toc-list-mobile");
+    const desktopNav = document.querySelector("#post-toc-desktop");
+    const desktopList = document.querySelector("#toc-list-desktop");
+    const desktopToggle = document.querySelector("#toc-desktop-toggle");
+    const desktopOpenIcon = document.querySelector("#toc-open-icon");
+    const desktopCloseIcon = document.querySelector("#toc-close-icon");
+
+    const headerEl = document.querySelector("#site-header");
+    const headerBtn = document.querySelector("#menu-btn");
+
+    if (!mobileNav || !mobileList || !desktopNav || !desktopList) return;
+
+    // Position mobile panel below header
+    if (headerEl) {
+      const rect = headerEl.getBoundingClientRect();
+      mobileNav.style.top = `${rect.height}px`;
+    }
+
+    // Collect headings, but exclude hidden/sr-only footnotes label
+    const headingNodes = Array.from(
+      document.querySelectorAll(
+        "article h2, article h3, article h4, article h5, article h6"
+      )
+    ).filter(
+      el => !(el.id === "footnote-label" || el.classList.contains("sr-only"))
+    );
+
+    mobileList.innerHTML = "";
+    desktopList.innerHTML = "";
+
+    if (headingNodes.length === 0) {
+      // Hide both desktop and mobile toggles when no headings
+      if (desktopToggle) {
+        desktopToggle.classList.add("!hidden");
+      }
+      if (headerBtn) {
+        headerBtn.classList.add("!hidden");
+      }
+      // Also hide the desktop nav
+      if (desktopNav) {
+        desktopNav.classList.add("!hidden");
+      }
+      return;
+    }
+
+    // Remove force-hidden class if headings exist
+    if (desktopToggle) {
+      desktopToggle.classList.remove("!hidden");
+    }
+    if (headerBtn) {
+      headerBtn.classList.remove("!hidden");
+    }
+    if (desktopNav) {
+      desktopNav.classList.remove("!hidden");
+    }
+
+    document.documentElement.style.scrollBehavior = "auto";
+
+    function stripHash(text) {
+      return text?.replace(/#\s*$/, "").trim();
+    }
+
+    function createLI(id, text) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `#${id}`;
+      a.textContent = stripHash(text);
+      a.className = "block rounded py-1 opacity-50 hover:opacity-30";
+      a.addEventListener("click", e => {
+        e.preventDefault();
+        const target = document.getElementById(id);
+        // Close mobile if open
+        if (!mobileNav.classList.contains("hidden")) {
+          mobileNav.classList.add("hidden");
+          const mi = document.querySelector("#menu-icon");
+          const ci = document.querySelector("#close-icon");
+          mi?.classList.remove("hidden");
+          ci?.classList.add("hidden");
+          headerBtn?.setAttribute("aria-expanded", "false");
+        }
+        if (target) {
+          target.scrollIntoView({ behavior: "auto", block: "start" });
+          history.replaceState(null, "", `#${id}`);
+        } else {
+          location.hash = `#${id}`;
+        }
+      });
+      li.appendChild(a);
+      return li;
+    }
+
+    const headings = headingNodes.filter(h => h.id);
+    for (const h of headings) {
+      const text = h.textContent || h.id;
+      mobileList.appendChild(createLI(h.id, text));
+      desktopList.appendChild(createLI(h.id, text));
+    }
+
+    // Desktop toggle - only functions on desktop screens
+    if (desktopToggle) {
+      desktopToggle.addEventListener("click", () => {
+        const isVisible = !desktopNav.classList.contains("!hidden");
+        if (isVisible) {
+          // Hide the nav
+          desktopNav.classList.add("!hidden");
+          desktopOpenIcon?.classList.remove("hidden");
+          desktopCloseIcon?.classList.add("hidden");
+          desktopToggle.setAttribute("aria-expanded", "false");
+        } else {
+          // Show the nav
+          desktopNav.classList.remove("!hidden");
+          desktopOpenIcon?.classList.add("hidden");
+          desktopCloseIcon?.classList.remove("hidden");
+          desktopToggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    }
+
+    // Improved scroll spy with better detection
+    let currentActive = "";
+
+    function updateActiveSection() {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      let newActive = "";
+
+      // Find the heading that's currently most visible
+      for (let i = 0; i < headings.length; i++) {
+        const heading = headings[i];
+        const rect = heading.getBoundingClientRect();
+        const headingTop = scrollY + rect.top;
+
+        // Check if we're past this heading
+        if (scrollY + windowHeight * 0.3 >= headingTop) {
+          newActive = heading.id;
+        } else {
+          break;
+        }
+      }
+
+      // Only activate first heading if we're actually close to it
+      if (headings.length > 0) {
+        const firstHeading = headings[0];
+        const firstRect = firstHeading.getBoundingClientRect();
+        const firstHeadingTop = scrollY + firstRect.top;
+
+        // If we're above the first heading by more than a reasonable distance, don't activate anything
+        if (scrollY + windowHeight * 0.3 < firstHeadingTop - 200) {
+          newActive = "";
+        }
+      }
+
+      if (newActive !== currentActive) {
+        currentActive = newActive;
+
+        // Update styles for both mobile and desktop
+        for (const list of [mobileList, desktopList]) {
+          const links = list.querySelectorAll("a");
+          links.forEach(a => {
+            const isActive = a.getAttribute("href") === `#${currentActive}`;
+            if (isActive) {
+              a.className = "block rounded py-1 font-bold opacity-100";
+            } else {
+              a.className = "block rounded py-1 opacity-50 hover:opacity-30";
+            }
+          });
+        }
+      }
+    }
+
+    // Use scroll event for more responsive updates
+    let scrollTimeout;
+    window.addEventListener("scroll", () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      scrollTimeout = setTimeout(updateActiveSection, 10);
+    });
+
+    // Initial update
+    updateActiveSection();
+  }
+  setupPostToc();
+  document.addEventListener("astro:after-swap", setupPostToc);
 </script>

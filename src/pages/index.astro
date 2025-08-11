@@ -14,101 +14,107 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 <Layout>
   <Header />
   <main id="main-content" data-layout="index">
-    <section id="intro" class="pt-8 pb-6">
-      <div class="app-prose mx-auto max-w-prose px-4 sm:px-0">
-        <p>
-          Trevor Pfizenmaier is a software engineer working to solve chronic
-          disease.
-        </p>
-      </div>
-    </section>
+    <article>
+      <div class="mx-auto max-w-app px-1 sm:px-0">
+        <section id="intro">
+          <div class="app-prose">
+            <p>
+              Trevor Pfizenmaier is a software engineer working to solve chronic
+              disease.
+            </p>
+          </div>
+        </section>
 
-    {
-      featuredPosts.length > 0 && (
-        <section id="posts" class="pt-12 pb-6">
-          <div class="mx-auto max-w-prose px-4 sm:px-0">
-            <h2 class="text-2xl font-semibold tracking-wide">Posts</h2>
+        {
+          featuredPosts.length > 0 && (
+            <section id="posts">
+              <div class="w-auto max-w-app">
+                <div class="app-prose">
+                  <h2 class="text-2xl font-semibold tracking-wide">Posts</h2>
+                </div>
+                <ul>
+                  {featuredPosts.map(data => (
+                    <Card variant="h3" compact={true} {...data} />
+                  ))}
+                </ul>
+              </div>
+            </section>
+          )
+        }
+
+        <section id="products">
+          <div class="app-prose">
+            <h2 class="text-2xl font-semibold tracking-wide">Products</h2>
             <ul>
-              {featuredPosts.map(data => (
-                <Card variant="h3" {...data} />
-              ))}
+              <li>
+                <a
+                  href="https://www.lampstand.ai/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Lampstand
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.generationallergyfree.com/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Generation Allergy Free
+                </a>
+              </li>
             </ul>
           </div>
         </section>
-      )
-    }
 
-    <section id="products" class="pt-12 pb-6">
-      <div class="app-prose mx-auto max-w-prose px-4 sm:px-0">
-        <h2 class="text-2xl font-semibold tracking-wide">Products</h2>
-        <ul>
-          <li>
-            <a
-              href="https://www.lampstand.ai/"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Lampstand
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.generationallergyfree.com/"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Generation Allergy Free
-            </a>
-          </li>
-        </ul>
+        <section id="open-source">
+          <div class="app-prose">
+            <h2 class="text-2xl font-semibold tracking-wide">
+              Open source projects
+            </h2>
+            <ul>
+              <li>
+                <a
+                  href="https://github.com/trevorpfiz/BioxML-allergen-epitopes"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  BioxML Hackathon 2024
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/trevorpfiz/scribeHC"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  scribeHC
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/trevorpfiz/wellchart"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  WellChart
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/trevorpfiz/patientx-starter"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  PatientX Starter
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
       </div>
-    </section>
-
-    <section id="open-source" class="pt-12 pb-6">
-      <div class="app-prose mx-auto max-w-prose px-4 sm:px-0">
-        <h2 class="text-2xl font-semibold tracking-wide">
-          Open source projects
-        </h2>
-        <ul>
-          <li>
-            <a
-              href="https://github.com/trevorpfiz/BioxML-allergen-epitopes"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              BioxML Hackathon 2024
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/trevorpfiz/scribeHC"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              scribeHC
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/trevorpfiz/wellchart"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              WellChart
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/trevorpfiz/patientx-starter"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              PatientX Starter
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
+    </article>
   </main>
   <Footer />
 </Layout>
