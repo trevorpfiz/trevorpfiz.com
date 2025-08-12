@@ -10,7 +10,7 @@ dayjs.extend(timezone);
 
 export interface Props {
   class?: string;
-  size?: "sm" | "lg";
+  size?: "sm" | "base" | "lg";
   timezone: string | undefined;
   pubDatetime: string | Date;
   modDatetime: string | Date | undefined | null;
@@ -22,7 +22,7 @@ export interface Props {
 const {
   pubDatetime,
   modDatetime,
-  size = "sm",
+  size = "base",
   class: className = "",
   timezone: postTimezone,
   showIcon = true,
@@ -40,7 +40,7 @@ const datetime = dayjs(
 const date = datetime.format("MMMM D, YYYY"); // e.g., 'March 22, 2025'
 ---
 
-<div class:list={["flex items-center gap-x-2 opacity-80", className]}>
+<div class:list={["flex items-center gap-x-2 opacity-60", className]}>
   {
     showIcon && (
       <IconCalendar
@@ -53,13 +53,23 @@ const date = datetime.format("MMMM D, YYYY"); // e.g., 'March 22, 2025'
   }
   {
     isModified && showUpdatedLabel && (
-      <span class:list={["text-sm", { "sm:text-base": size === "lg" }]}>
+      <span
+        class:list={[
+          size === "sm" && "text-sm",
+          size === "base" && "text-base",
+          size === "lg" && "text-lg",
+        ]}
+      >
         Updated:
       </span>
     )
   }
   <time
-    class:list={["text-sm", { "sm:text-base": size === "lg" }]}
+    class:list={[
+      size === "sm" && "text-sm",
+      size === "base" && "text-base",
+      size === "lg" && "text-lg",
+    ]}
     datetime={datetime.toISOString()}>{date}</time
   >
 </div>

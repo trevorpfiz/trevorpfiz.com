@@ -2,15 +2,14 @@
 import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
 ---
 
-<div class="mt-8 flex w-full items-center justify-center" data-btt-static>
-  <button
-    data-button="back-to-top"
-    class="inline-flex items-center gap-2 rounded-md border border-muted bg-background/70 px-3 py-2 text-sm font-medium text-foreground shadow-sm backdrop-blur hover:opacity-90 focus-visible:outline-none"
-  >
-    <IconArrowNarrowUp class="inline-block size-4" />
-    Back To Top
-  </button>
-</div>
+<button
+  data-button="back-to-top"
+  data-btt-static
+  class="group inline-flex items-center gap-2 px-3 py-2 font-mono text-sm text-foreground hover:text-accent focus-visible:outline-none"
+>
+  <IconArrowNarrowUp class="inline-block size-4 group-hover:text-accent" />
+  <span class="group-hover:text-accent">Back To Top</span>
+</button>
 
 <script is:inline data-astro-rerun>
   function initializeBackToTopStaticButton() {

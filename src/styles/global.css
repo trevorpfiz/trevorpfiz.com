@@ -1,23 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap");
+
 @import "tailwindcss";
+
+@theme {
+  --font-serif: "Source Serif 4", serif;
+}
+
 @import "./typography.css";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root,
 html[data-theme="light"] {
-  --background: #fdfdfd;
-  --foreground: #282728;
-  --accent: #006cac;
-  --muted: #e6e6e6;
-  --border: #ece9e9;
+  --background: #F1EBE7;   /* warm paper */
+  --foreground: #161517;   /* same as dark background */
+  --accent:     #DA7756;
+  --muted:      #E7E0DB;
+  --border:     #E0D8D2;   /* slightly stronger than muted */
 }
 
 html[data-theme="dark"] {
-  --background: #212737;
-  --foreground: #eaedf3;
-  --accent: #ff6b01;
-  --muted: #343f60;
-  --border: #ab4b08;
+  --background: #161517;   /* ink */
+  --foreground: #F1EBE7;   /* same as light background */
+  --accent:     #DA7756;   /* same accent as light */
+  --muted:      #242326;
+  --border:     #2E2D30;
 }
 
 @theme inline {
@@ -38,7 +45,7 @@ html[data-theme="dark"] {
     @apply overflow-y-scroll scroll-smooth;
   }
   body {
-    @apply flex min-h-svh flex-col bg-background font-mono text-foreground selection:bg-accent/75 selection:text-background;
+    @apply flex min-h-svh flex-col bg-background font-serif text-foreground selection:bg-accent/75 selection:text-background;
   }
   a,
   button {
@@ -55,15 +62,47 @@ html[data-theme="dark"] {
 }
 
 @utility max-w-app {
-  @apply max-w-[65ch];
+  @apply max-w-[612px];
 }
 
 .active-nav {
-  @apply underline decoration-wavy decoration-2 underline-offset-4;
+  @apply underline decoration-wavy decoration-[1.6px] underline-offset-2;
 }
 
 /* Source: https://piccalil.li/blog/a-more-modern-css-reset/ */
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
   scroll-margin-block: 1rem;
+}
+
+/* Footnote tooltip styles */
+.footnote-tooltip {
+  @apply absolute z-50 hidden border border-border text-base shadow-lg;
+  background: color-mix(in oklab, var(--background) 90%, var(--foreground) 10%);
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0.5rem);
+  white-space: normal;
+  pointer-events: none;
+  width: 36vw;
+  padding: 16px 20px;
+}
+
+html[data-theme="dark"] .footnote-tooltip {
+  background: color-mix(in oklab, var(--background) 60%, var(--foreground) 40%);
+}
+
+.footnote-tooltip.show {
+  @apply block;
+}
+
+/* Remove margins from paragraphs in tooltips */
+.footnote-tooltip p {
+  @apply m-0 inline text-base;
+}
+
+/* Style the sup element in tooltips */
+.footnote-tooltip sup {
+  @apply font-bold inline;
+  vertical-align: baseline;
 }

@@ -3,6 +3,7 @@ export interface Props {
   id?: string;
   href: string;
   class?: string;
+  style?: string;
   ariaLabel?: string;
   title?: string;
   disabled?: boolean;
@@ -12,6 +13,7 @@ const {
   id,
   href,
   class: className = "",
+  style,
   ariaLabel,
   title,
   disabled = false,
@@ -23,6 +25,7 @@ const {
     <span
       id={id}
       class:list={["group inline-block", className]}
+      style={style}
       title={title}
       aria-disabled={disabled}
     >
@@ -32,7 +35,8 @@ const {
     <a
       id={id}
       {href}
-      class:list={["group inline-block hover:text-accent", className]}
+      class:list={["hover:text-accent group inline-block", className]}
+      style={style}
       aria-label={ariaLabel}
       title={title}
     >

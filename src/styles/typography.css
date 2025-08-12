@@ -24,11 +24,12 @@
     figcaption,
     table,
     code {
-      @apply text-foreground;
+      @apply text-foreground text-xl;
     }
 
     a {
-      @apply break-words text-foreground decoration-dashed underline-offset-4 hover:text-accent focus-visible:no-underline;
+      @apply break-words text-foreground text-xl underline-offset-2 hover:text-accent focus-visible:no-underline decoration-[1.6px] font-normal;
+      padding: 0.15em 0;
     }
 
     ul {
@@ -89,6 +90,26 @@
     pre {
       @apply focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
     }
+
+    /* Footnote references */
+    sup[data-footnote-ref] a,
+    sup a[data-footnote-ref] {
+      @apply no-underline rounded text-xs font-medium hover:bg-accent/20 transition-colors ms-0.5;
+      background: color-mix(in oklab, var(--background) 90%, var(--foreground) 10%);
+      text-decoration: none !important;
+      padding: 3px 3px 1px 3px;
+    }
+
+    /* Footnote backrefs */
+    [data-footnote-backref] {
+      @apply font-mono;
+    }
+  }
+
+  /* Dark mode footnote references - outside of app-prose for proper specificity */
+  html[data-theme="dark"] .app-prose sup[data-footnote-ref] a,
+  html[data-theme="dark"] .app-prose sup a[data-footnote-ref] {
+    background: color-mix(in oklab, var(--background) 70%, var(--foreground) 30%);
   }
 
   /* ===== Code Blocks & Syntax Highlighting ===== */

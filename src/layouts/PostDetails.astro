@@ -139,12 +139,12 @@ const nextPost =
   </button>
   <nav
     id="post-toc-desktop"
-    class="fixed inset-y-0 left-0 z-20 hidden h-dvh overflow-y-auto bg-background px-6 pt-32 lg:block"
+    class="fixed inset-y-0 left-0 z-20 hidden h-dvh max-w-[23rem] overflow-y-auto bg-background px-6 pt-32 lg:block"
     style="width: var(--toc-width, 20%);"
     aria-label="Table of contents"
   >
-    <h2 class="mb-4 text-base font-semibold">Contents</h2>
-    <ul id="toc-list-desktop" class="space-y-2"></ul>
+    <h2 class="mb-4 text-2xl font-semibold">Contents</h2>
+    <ul id="toc-list-desktop" class="space-y-2 pt-4 pb-8"></ul>
   </nav>
 
   <!-- Mobile TOC overlay (below header, full height minus header) -->
@@ -154,7 +154,7 @@ const nextPost =
     aria-label="Table of contents"
   >
     <div class="mx-auto max-w-app px-4 py-4">
-      <h2 class="mb-4 text-lg font-semibold">Contents</h2>
+      <h2 class="mb-4 text-2xl font-semibold">Contents</h2>
       <ul id="toc-list-mobile" class="list-none space-y-2 pl-0"></ul>
     </div>
   </nav>
@@ -168,11 +168,11 @@ const nextPost =
   >
     <h1
       transition:name={slugifyStr(title)}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
+      class="inline-block text-5xl font-bold text-accent lg:text-[64px]"
     >
       {title}
     </h1>
-    <div class="my-2 flex items-center gap-2">
+    <div class="mt-9 mb-0 flex items-center gap-2">
       <Datetime
         {pubDatetime}
         {modDatetime}
@@ -180,11 +180,12 @@ const nextPost =
         showIcon={false}
         showUpdatedLabel={false}
         preferPublished={true}
+        size="lg"
       />
     </div>
     <article
       id="article"
-      class="app-prose mx-auto mt-8 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
+      class="app-prose mx-auto mt-5 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
     >
       <Content />
     </article>
@@ -193,11 +194,14 @@ const nextPost =
 
     <EditPost class="sm:hidden" {hideEditPost} {post} />
 
-    <ul class="mt-4 mb-8 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
-    </ul>
-
-    <BackToTopButton />
+    <div class="mt-4 mb-8 flex items-center gap-4 sm:my-8">
+      <ul class="flex flex-1 flex-wrap gap-2">
+        {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
+      </ul>
+      <div class="flex-shrink-0">
+        <BackToTopButton />
+      </div>
+    </div>
 
     <hr class="my-6 border-dashed" />
 
@@ -315,12 +319,109 @@ const nextPost =
   }
   attachCopyButtons();
 
+  /** Attaches tooltips to footnote references */
+  function attachFootnoteTooltips() {
+    // First, remove any existing tooltips to prevent duplicates
+    document.querySelectorAll(".footnote-tooltip").forEach(tooltip => {
+      tooltip.remove();
+    });
+
+    const footnoteRefs = document.querySelectorAll(
+      "sup a[data-footnote-ref], sup[data-footnote-ref] a"
+    );
+
+    footnoteRefs.forEach(ref => {
+      const supElement = ref.closest("sup");
+      if (!supElement) return;
+
+      // Skip if this sup already has a tooltip (extra safety check)
+      if (supElement.querySelector(".footnote-tooltip")) return;
+
+      // Get the footnote ID from the href
+      const footnoteId = ref.getAttribute("href")?.replace("#", "");
+      if (!footnoteId) return;
+
+      // Find the corresponding footnote content
+      const footnoteElement = document.getElementById(footnoteId);
+      if (!footnoteElement) return;
+
+      // Get the footnote text (excluding the backref link)
+      const footnoteContent = footnoteElement.cloneNode(true);
+      const backref = footnoteContent.querySelector("[data-footnote-backref]");
+      if (backref) backref.remove();
+
+      // Create tooltip element
+      const tooltip = document.createElement("div");
+      tooltip.className = "footnote-tooltip";
+
+      // Get the footnote number from the ref text
+      const footnoteNumber = ref.textContent.trim();
+
+      // Create the tooltip content with footnote number at the start
+      tooltip.innerHTML = `<sup>${footnoteNumber}</sup> ${footnoteContent.innerHTML.trim()}`;
+
+      // Make the sup element relative positioned for tooltip
+      supElement.style.position = "relative";
+      supElement.appendChild(tooltip);
+
+      // Show tooltip on hover
+      ref.addEventListener("mouseenter", () => {
+        tooltip.classList.add("show");
+      });
+
+      ref.addEventListener("mouseleave", () => {
+        tooltip.classList.remove("show");
+      });
+
+      // Also handle touch for mobile
+      ref.addEventListener("click", () => {
+        // Allow the link to work but also show tooltip briefly
+        tooltip.classList.add("show");
+        setTimeout(() => {
+          tooltip.classList.remove("show");
+        }, 2000);
+      });
+    });
+  }
+  attachFootnoteTooltips();
+
   /* Go to page start after page swap */
-  document.addEventListener("astro:after-swap", () =>
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
-  );
+  document.addEventListener("astro:after-swap", () => {
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+    attachFootnoteTooltips(); // Re-attach tooltips after navigation
+  });
 
   // Build and wire up TOC for mobile and desktop
+  function bindDesktopTocToggle(
+    desktopToggle,
+    desktopNav,
+    desktopOpenIcon,
+    desktopCloseIcon
+  ) {
+    if (!desktopToggle || !desktopNav) return;
+    // Avoid binding multiple times across navigations
+    if (desktopToggle.dataset.bound === "true") return;
+
+    desktopToggle.addEventListener("click", () => {
+      const isVisible = !desktopNav.classList.contains("!hidden");
+      if (isVisible) {
+        // Hide the nav
+        desktopNav.classList.add("!hidden");
+        desktopOpenIcon?.classList.remove("hidden");
+        desktopCloseIcon?.classList.add("hidden");
+        desktopToggle.setAttribute("aria-expanded", "false");
+      } else {
+        // Show the nav
+        desktopNav.classList.remove("!hidden");
+        desktopOpenIcon?.classList.add("hidden");
+        desktopCloseIcon?.classList.remove("hidden");
+        desktopToggle.setAttribute("aria-expanded", "true");
+      }
+    });
+
+    desktopToggle.dataset.bound = "true";
+  }
+
   function setupPostToc() {
     const mobileNav = document.querySelector("#post-toc-mobile");
     const mobileList = document.querySelector("#toc-list-mobile");
@@ -332,6 +433,14 @@ const nextPost =
 
     const headerEl = document.querySelector("#site-header");
     const headerBtn = document.querySelector("#menu-btn");
+
+    // Always attempt to bind the desktop toggle if elements exist
+    bindDesktopTocToggle(
+      desktopToggle,
+      desktopNav,
+      desktopOpenIcon,
+      desktopCloseIcon
+    );
 
     if (!mobileNav || !mobileList || !desktopNav || !desktopList) return;
 
@@ -390,7 +499,8 @@ const nextPost =
       const a = document.createElement("a");
       a.href = `#${id}`;
       a.textContent = stripHash(text);
-      a.className = "block rounded py-1 opacity-50 hover:opacity-30";
+      a.className =
+        "block rounded py-1 text-xl font-normal opacity-50 hover:opacity-30";
       a.addEventListener("click", e => {
         e.preventDefault();
         const target = document.getElementById(id);
@@ -421,25 +531,7 @@ const nextPost =
       desktopList.appendChild(createLI(h.id, text));
     }
 
-    // Desktop toggle - only functions on desktop screens
-    if (desktopToggle) {
-      desktopToggle.addEventListener("click", () => {
-        const isVisible = !desktopNav.classList.contains("!hidden");
-        if (isVisible) {
-          // Hide the nav
-          desktopNav.classList.add("!hidden");
-          desktopOpenIcon?.classList.remove("hidden");
-          desktopCloseIcon?.classList.add("hidden");
-          desktopToggle.setAttribute("aria-expanded", "false");
-        } else {
-          // Show the nav
-          desktopNav.classList.remove("!hidden");
-          desktopOpenIcon?.classList.add("hidden");
-          desktopCloseIcon?.classList.remove("hidden");
-          desktopToggle.setAttribute("aria-expanded", "true");
-        }
-      });
-    }
+    // Desktop toggle binding handled above via bindDesktopTocToggle
 
     // Improved scroll spy with better detection
     let currentActive = "";
@@ -485,9 +577,11 @@ const nextPost =
           links.forEach(a => {
             const isActive = a.getAttribute("href") === `#${currentActive}`;
             if (isActive) {
-              a.className = "block rounded py-1 font-bold opacity-100";
+              a.className =
+                "block rounded py-1 text-xl font-normal opacity-100 hover:opacity-75";
             } else {
-              a.className = "block rounded py-1 opacity-50 hover:opacity-30";
+              a.className =
+                "block rounded py-1 text-xl font-normal opacity-50 hover:opacity-30";
             }
           });
         }
@@ -507,5 +601,9 @@ const nextPost =
     updateActiveSection();
   }
   setupPostToc();
+  document.addEventListener("astro:page-load", () => {
+    setupPostToc();
+    attachFootnoteTooltips(); // Attach tooltips on page load
+  });
   document.addEventListener("astro:after-swap", setupPostToc);
 </script>
