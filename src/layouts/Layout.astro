@@ -134,7 +134,48 @@ const structuredData = {
     <!-- Font preloading with Astro Fonts API -->
     <Font cssVariable="--font-serif" preload />
 
-    <script is:inline src="/toggle-theme.js"></script>
+    <!-- Critical theme initialization - inlined to prevent FOUC -->
+    <script is:inline>
+      (function () {
+        const primaryColorScheme = ""; // "light" | "dark"
+        const currentTheme = localStorage.getItem("theme");
+
+        function getPreferTheme() {
+          if (currentTheme) return currentTheme;
+          if (primaryColorScheme) return primaryColorScheme;
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+
+        const themeValue = getPreferTheme();
+
+        function reflectPreference() {
+          document.firstElementChild.setAttribute("data-theme", themeValue);
+          document
+            .querySelector("#theme-btn")
+            ?.setAttribute("aria-label", themeValue);
+
+          const body = document.body;
+          if (body) {
+            const computedStyles = window.getComputedStyle(body);
+            const bgColor = computedStyles.backgroundColor;
+            document
+              .querySelector("meta[name='theme-color']")
+              ?.setAttribute("content", bgColor);
+          }
+        }
+
+        // Set theme immediately to prevent flash
+        reflectPreference();
+
+        // Store theme value globally for the deferred script
+        window.__themeValue = themeValue;
+      })();
+    </script>
+
+    <!-- Non-critical theme functionality - deferred -->
+    <script defer src="/theme-interactive.js"></script>
   </head>
   <body>
     <slot />
