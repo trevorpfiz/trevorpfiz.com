@@ -1,4 +1,4 @@
-import { defineConfig, envField } from "astro/config";
+import { defineConfig, envField, fontProviders } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
@@ -62,5 +62,17 @@ export default defineConfig({
   },
   experimental: {
     preserveScriptOrder: true,
+    fonts: [
+      {
+        provider: fontProviders.google(),
+        name: "Source Serif 4",
+        cssVariable: "--font-serif",
+        weights: [200, 300, 400, 500, 600, 700, 800, 900],
+        styles: ["normal", "italic"],
+        subsets: ["latin", "latin-ext"],
+        display: "swap",
+        fallbacks: ["serif"],
+      },
+    ],
   },
 });
