@@ -364,14 +364,27 @@ const nextPost =
       supElement.style.position = "relative";
       supElement.appendChild(tooltip);
 
-      // Show tooltip on hover
-      ref.addEventListener("mouseenter", () => {
-        tooltip.classList.add("show");
-      });
+      // Show tooltip on hover with proper hover handling
+      let hideTimeout;
 
-      ref.addEventListener("mouseleave", () => {
-        tooltip.classList.remove("show");
-      });
+      const showTooltip = () => {
+        clearTimeout(hideTimeout);
+        tooltip.classList.add("show");
+      };
+
+      const hideTooltip = () => {
+        hideTimeout = setTimeout(() => {
+          tooltip.classList.remove("show");
+        }, 100); // Small delay to allow moving to tooltip
+      };
+
+      // Show tooltip when hovering over the footnote reference
+      ref.addEventListener("mouseenter", showTooltip);
+      ref.addEventListener("mouseleave", hideTooltip);
+
+      // Keep tooltip open when hovering over the tooltip itself
+      tooltip.addEventListener("mouseenter", showTooltip);
+      tooltip.addEventListener("mouseleave", hideTooltip);
 
       // Also handle touch for mobile
       ref.addEventListener("click", () => {
@@ -388,7 +401,7 @@ const nextPost =
   /* Go to page start after page swap */
   document.addEventListener("astro:after-swap", () => {
     window.scrollTo({ left: 0, top: 0, behavior: "instant" });
-    attachFootnoteTooltips(); // Re-attach tooltips after navigation
+    attachFootnoteTooltips(); // Re-attach tooltips after navigation (might not be needed)
   });
 
   // Build and wire up TOC for mobile and desktop

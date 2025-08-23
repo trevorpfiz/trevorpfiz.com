@@ -80,9 +80,90 @@ Powerful AI will shape humanity’s destiny, and we deserve to understand our ow
 
 _Thanks to Tom McGrath, Martin Wattenberg, Chris Olah, Ben Buchanan, and many people within Anthropic for feedback on drafts of this article._
 
+$x + y$
+- $x - y$
+- $x \times y$
+- $x \div y$
+- $\dfrac{x}{y}$
+- $\sqrt{x}$
+
+- $\pi \approx 3.14159$
+- $\pm \, 0.2$
+- $\dfrac{0}{1} \neq \infty$
+- $0 < x < 1$
+- $0 \leq x \leq 1$
+- $x \geq 10$
+- $\forall \, x \in (1,2)$
+- $\exists \, x \notin [0,1]$
+- $A \subset B$
+- $A \subseteq B$
+- $A \cup B$
+- $A \cap B$
+- $X \implies Y$
+- $X \impliedby Y$
+- $a \to b$
+- $a \longrightarrow b$
+- $a \Rightarrow b$
+- $a \Longrightarrow b$
+- $a \propto b$
+
+## Math Examples
+
+Here are some examples of mathematical expressions using LaTeX syntax:
+
+Inline math: The famous equation is $E = mc^2$, which relates energy to mass and the speed of light.
+
+Block math:
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+
+More complex example:
+$$
+\frac{\partial}{\partial t} \Psi(x,t) = \frac{i\hbar}{2m} \frac{\partial^2}{\partial x^2} \Psi(x,t) + V(x)\Psi(x,t)
+$$
+
+Matrix example:
+$$
+\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y
+\end{pmatrix}
+=
+\begin{pmatrix}
+ax + by \\
+cx + dy
+\end{pmatrix}
+$$
+
+$$
+\underbrace{
+\overbrace{a+b}^6 \cdot \overbrace{c+d}^7
+}_\text{example of text} = 42
+$$
+
+$$
+\prod_{\substack{
+p \leq x \\
+\text{p prime}
+}} \left( 1 - \dfrac{1}{p} \right)
+$$
+
+$$
+\begin{matrix}
+R^n & \overset{A}{\longrightarrow} & R^m \\
+\cong &  & \cong \\
+R^n & \overset{B}{\longrightarrow} & R^m \\
+\end{matrix}
+$$
+
 ## Footnotes
 
-[^1]: In the case of a plant, this would be water, sunlight, a trellis pointing them in a certain direction, choosing the species of plant, etc. These things dictate roughly where the plant grows, but its exact shape and growth pattern are impossible to predict, and hard to explain even after they’ve grown. In the case of AI systems, we can set the basic architecture (usually some variant of the Transformer), the broad type of data they receive, and the high-level algorithm used to train them, but the model’s actual cognitive mechanisms emerge organically from these ingredients, and our understanding of them is poor. In fact, there are many examples, in both the natural and artificial worlds, of systems we understand (and sometimes control) at the level of principles but not in detail: economies, snowflakes, cellular automata, human evolution, human brain development, and so on.
+[^1]: <https://youtu.be/lhdCL-SEwow?si=2Vcm-rVAvJNfKJjI>
 [^2]: You can of course try to detect these risks by simply interacting with the models, and we do this in practice. But because deceit is precisely the behavior we’re trying to find, external behavior is not reliable. It’s a bit like trying to determine if someone is a terrorist by asking them if they are a terrorist—not necessarily useless, and you can learn things by how they answer and what they say, but very obviously unreliable.
 [^3]: I’ll probably describe this in more detail in a future essay, but there are a lot of experiments (many of which were done by Anthropic) showing that models can lie or deceive under certain circumstances when their training is guided in a somewhat artificial way. There is also evidence of real-world behavior that looks vaguely like “cheating on the test”, though it’s more degenerate than it is dangerous or harmful. What there isn’t is evidence of dangerous behaviors emerging in a more naturalistic way, or of a general tendency or general intent to lie and deceive for the purposes of gaining power over the world. It is the latter point where seeing inside the models could help a lot.
 [^4]: At least in the case of API-served models. Open-weights models present additional dangers in that guardrails can be simply stripped away.

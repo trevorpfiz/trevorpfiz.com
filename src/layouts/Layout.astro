@@ -176,8 +176,28 @@ const structuredData = {
 
     <!-- Non-critical theme functionality - deferred -->
     <script defer src="/theme-interactive.js"></script>
+
+    <!-- Navigation fallback for browser back button issues -->
+    <script is:inline>
+      (function () {
+        // Simple fallback for when Astro's view transitions fail to handle back navigation
+        window.addEventListener("popstate", () => {
+          const targetPath = location.pathname;
+
+          // Give Astro a short chance to handle the navigation
+          setTimeout(() => {
+            const currentRoute = document.body?.dataset?.route;
+
+            // If the page content doesn't match the URL, reload
+            if (currentRoute !== targetPath) {
+              location.reload();
+            }
+          }, 150);
+        });
+      })();
+    </script>
   </head>
-  <body>
+  <body data-route={new URL(canonicalURL).pathname}>
     <slot />
   </body>
 </html>

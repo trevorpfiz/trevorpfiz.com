@@ -3,6 +3,9 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
+import remarkMath from "remark-math";
+import rehypeExternalLinks from "rehype-external-links";
+import rehypeKatex from "rehype-katex";
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -20,7 +23,17 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
+    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }], remarkMath],
+    rehypePlugins: [
+      [
+        rehypeExternalLinks,
+        {
+          target: "_blank",
+          rel: ["nofollow", "noopener", "noreferrer"],
+        }
+      ],
+      rehypeKatex
+    ],
     remarkRehype: {
       clobberPrefix: ""
     },

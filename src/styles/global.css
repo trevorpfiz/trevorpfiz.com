@@ -81,7 +81,7 @@ html[data-theme="dark"] {
   left: 50%;
   transform: translateX(-50%) translateY(0.5rem);
   white-space: normal;
-  pointer-events: none;
+  pointer-events: auto;
   width: 36vw;
   padding: 16px 20px;
 }
@@ -103,4 +103,9 @@ html[data-theme="dark"] .footnote-tooltip {
 .footnote-tooltip sup {
   @apply font-bold inline;
   vertical-align: baseline;
+}
+
+/* KaTeX math rendering styles */
+.katex-html {
+  @apply hidden;
 }
