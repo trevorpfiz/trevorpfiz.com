@@ -8,3 +8,9 @@ When running the development server (`pnpm dev`), you can view the dynamically g
 - **Post OG Image**: <http://localhost:4321/posts/the-urgency-of-interpretability/index.png>
 
 These images use Source Serif 4 font and are generated dynamically for social media sharing.
+
+## Generate timestamps for posts
+
+```bash
+date -u +"%Y-%m-%dT%H:%M:%SZ"
+```
