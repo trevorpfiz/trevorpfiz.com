@@ -398,12 +398,6 @@ const nextPost =
   }
   attachFootnoteTooltips();
 
-  /* Go to page start after page swap */
-  document.addEventListener("astro:after-swap", () => {
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" });
-    attachFootnoteTooltips(); // Re-attach tooltips after navigation (might not be needed)
-  });
-
   // Build and wire up TOC for mobile and desktop
   function bindDesktopTocToggle(
     desktopToggle,

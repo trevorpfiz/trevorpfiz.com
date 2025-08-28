@@ -112,6 +112,16 @@
     background: color-mix(in oklab, var(--background) 70%, var(--foreground) 30%);
   }
 
+  /* ===== KaTeX Math Rendering ===== */
+  .app-prose .katex-display {
+    @apply text-foreground;
+    
+    /* Horizontal scroll (recommended - preserves equation structure) */
+    overflow: auto hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
   /* ===== Code Blocks & Syntax Highlighting ===== */
   .astro-code {
     @apply flex border bg-(--shiki-light-bg) text-(--shiki-light) outline-border [&_span]:text-(--shiki-light);
