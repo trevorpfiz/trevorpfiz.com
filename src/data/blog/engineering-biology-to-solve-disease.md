@@ -1,7 +1,7 @@
 ---
 author: Trevor Pfizenmaier
-pubDatetime: 2025-08-27T21:46:09Z
-modDatetime: 2025-08-28T18:16:07Z
+pubDatetime: 2025-08-28T18:16:07Z
+modDatetime: 2025-08-29T00:48:39Z
 title: Engineering Biology to Solve Disease
 slug: engineering-biology-to-solve-disease
 featured: true
@@ -45,7 +45,7 @@ In biology, this engineering approach is embodied by the Design-Build-Test-Learn
 Let's look at a concrete example: improving the enzyme used in Continuous Glucose Monitors (CGMs). A key challenge for CGMs is that the enzyme, glucose oxidase, degrades at body temperature, limiting the sensor's lifespan.
 
 1. **Design:** An AI model, trained on protein structures, proposes 10,000 mutations to the glucose oxidase enzyme that it predicts will increase thermal stability without harming its glucose-detecting function.
-2. **Build:** Lab automation synthesizes the DNA for these 10,000 variants and uses bacteria to produce each unique enzyme.
+2. **Build:** Lab automation synthesizes the DNA for these 10,000 variants and uses a cell-free system to produce each unique enzyme.
 3. **Test:** Each of the 10,000 enzymes is tested in a high-throughput assay that measures two key parameters: its activity (how well it detects glucose) and its stability (how long it lasts at body temperature).
 4. **Learn:** The performance data is fed back to the AI model. It learns which mutations, or combinations of mutations, led to more stable and active enzymes, refining its understanding for the next round of design.
 
